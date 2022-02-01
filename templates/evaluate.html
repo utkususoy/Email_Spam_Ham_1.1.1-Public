@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block evaluate %}
+<!-- Button trigger modal -->
+
+  <!-- Modal -->
+  <div class="evaluate" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{res.res}}</h5>
+        </div>
+        <div class="modal-body">
+          is it correct?
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('welcome_page')}}" class="btn btn-secondary" onclick="testing(`{{res.res}}`,`{{res.mail}}`, true);">Yes</a>
+          <a href="{{url_for('welcome_page')}}" class="btn btn-secondary" onclick="testing(`{{res.res}}`,`{{res.mail}}`, false);">No</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block script %}
+<script>
+
+    function testing(_pred, _mail, _val) {
+        var actual_pred = ""
+        if (_val) {
+          actual_pred = _pred;
+        }else {
+          actual_pred = (_pred == "Spam" )? "Non-Spam" : "Spam";
+        }
+
+
+        console.log(_mail)
+        var entry = {
+            mail: _mail,
+            prediction: _pred,
+            validation: actual_pred
+        }
+
+        console.log(_val)
+
+        fetch(`${window.origin}/save`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(entry),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+    }
+</script>
+
+{% endblock %}
