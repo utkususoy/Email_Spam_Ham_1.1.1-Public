@@ -30,6 +30,11 @@ def receive_text():
     except Exception as e:
         return "{}".format(e)
 
+####
+
+#    Sadece Yanlış predict edilen mailler tekrardan train edilecek. Değiştir mail repetition olmasın sadece
+
+        ####
 @app.route("/train", methods=['GET'])
 def train_model():
     repo = repository.Mongo_db_repository()
