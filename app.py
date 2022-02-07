@@ -69,8 +69,6 @@ def get_user_accuracy():
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=train_model, trigger="interval", seconds=60)
-
+scheduler.start()
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port = 8000, use_reloader=False)
-    scheduler.start()
-    print("startedddddd")
