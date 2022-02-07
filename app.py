@@ -6,9 +6,21 @@ from flask import Flask, jsonify, request, render_template
 import Naive_Bayes_Prediction
 import repository
 import pickle
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 res = ""
+
+
+
+def train_call():
+    res = requests.get('https://mailprediction.herokuapp.com/train')
+    return (res.status_code)
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=train_call, trigger="interval", seconds=60)
+scheduler.start()
 
 @app.route("/")
 def welcome_page():
@@ -65,4 +77,4 @@ def get_user_accuracy():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 80, debug=True)
+    app.run(host='0.0.0.0', port = 8000, debug=True)
