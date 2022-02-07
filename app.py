@@ -13,15 +13,6 @@ app = Flask(__name__)
 res = ""
 
 
-
-def train_call():
-    res = requests.get('https://mailprediction.herokuapp.com/train')
-    return (res.status_code)
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=train_call, trigger="interval", seconds=60)
-scheduler.start()
-
 @app.route("/")
 def welcome_page():
     return render_template("index.html")
@@ -76,5 +67,10 @@ def get_user_accuracy():
     return {'runtime_acc': general_acc, 'model_acc': current_model_acc}
 
 
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=train_model, trigger="interval", seconds=60)
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 8000, debug=True)
+    app.run(host='0.0.0.0', port = 8000, use_reloader=False)
+    scheduler.start()
+    print("startedddddd")
